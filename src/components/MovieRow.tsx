@@ -1,9 +1,9 @@
-import { Item, MovieList, Results } from '../Model';
-import React, { useEffect, useState } from 'react';
-import ChosenDisplay from './ChosenDisplay';
-import './MovieRow.css';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { Item, MovieList, Results } from "../Model";
+import React, { useEffect, useState } from "react";
+import ChosenDisplay from "./ChosenDisplay";
+import "./MovieRow.css";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 type MovieRowProps = {
   item: MovieList;
   handleModal: (eachItem: Results) => Promise<void>;
@@ -64,11 +64,12 @@ const MovieRow = ({
                 <img
                   src={`https://image.tmdb.org/t/p/w300/${eachItem.poster_path}`}
                   alt={eachItem.original_title}
-                  onClick={e => {
+                  onClick={(e) => {
                     e.preventDefault();
                     setSimilarList(undefined);
                     frontDisplay(eachItem);
                     handleModal(eachItem);
+                    console.log(eachItem);
                   }}
                 ></img>
               </div>

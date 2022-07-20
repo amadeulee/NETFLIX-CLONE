@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import ChosenDisplay from './components/ChosenDisplay';
-import FeaturedMovie from './components/FeaturedMovie';
-import Header from './components/Header';
-import MovieRow from './components/MovieRow';
-import { SeriesInfo } from './ModalModel';
-import { Item, MovieList, Results } from './Model';
-import { MovieModel } from './MovieModel';
-import Tmdb from './services/Tmdb';
-import { Trailer } from './TrailerModel';
+import { useEffect, useState } from "react";
+import "./App.css";
+import ChosenDisplay from "./components/ChosenDisplay";
+import FeaturedMovie from "./components/FeaturedMovie";
+import Header from "./components/Header";
+import MovieRow from "./components/MovieRow";
+import { SeriesInfo } from "./ModalModel";
+import { Item, MovieList, Results } from "./Model";
+import { MovieModel } from "./MovieModel";
+import Tmdb from "./services/Tmdb";
+import { Trailer } from "./TrailerModel";
 
 function App() {
   const [movieList, setMovieList] = useState<MovieList[]>([]);
   const [featuredData, setFeaturedData] = useState<SeriesInfo>();
   const [blackHeader, setBlackHeader] = useState<boolean>(false);
   const [chosenDisplay, setChoseDisplay] = useState<Results>();
-  const [modalSerie, setModalSerie] = useState<SeriesInfo | MovieModel>();
+  const [modalSerie, setModalSerie] = useState<SeriesInfo & MovieModel>();
   const [similarList, setSimilarList] = useState<Item>();
   const [trailerVideo, setTrailerVideo] = useState<Trailer>();
 
@@ -24,23 +24,23 @@ function App() {
   const handleModal = async (eachItem: Results) => {
     console.log(eachItem.id);
     let similarListTemp;
-    let modalInfo;
+    let modalInfo: (SeriesInfo & MovieModel) | undefined;
     let trailer;
 
     if (eachItem.original_title) {
-      modalInfo = await Tmdb.getModalInfo(eachItem.id, 'movie');
-      similarListTemp = await Tmdb.getSimilarList(eachItem.id, 'movie');
-      trailer = await Tmdb.getItemTrailer(eachItem.id, 'movie');
+      modalInfo = await Tmdb.getModalInfo(eachItem.id, "movie");
+      similarListTemp = await Tmdb.getSimilarList(eachItem.id, "movie");
+      trailer = await Tmdb.getItemTrailer(eachItem.id, "movie");
     } else {
-      modalInfo = await Tmdb.getModalInfo(eachItem.id, 'tv');
-      similarListTemp = await Tmdb.getSimilarList(eachItem.id, 'tv');
-      trailer = await Tmdb.getItemTrailer(eachItem.id, 'tv');
+      modalInfo = await Tmdb.getModalInfo(eachItem.id, "tv");
+      similarListTemp = await Tmdb.getSimilarList(eachItem.id, "tv");
+      trailer = await Tmdb.getItemTrailer(eachItem.id, "tv");
     }
 
     setModalSerie(modalInfo);
     setSimilarList(similarListTemp);
     setTrailerVideo(trailer);
-    console.log(trailer);
+    console.log(modalInfo);
     // console.log(similarListTemp);
   };
 
@@ -51,7 +51,7 @@ function App() {
       setMovieList(list);
 
       // Taking featured movie
-      let originals = list.filter(i => i.category === 'originals');
+      let originals = list.filter((i) => i.category === "originals");
       let randomOriginal = Math.floor(
         Math.random() * (originals[0].items.results.length - 1)
       );
@@ -60,7 +60,7 @@ function App() {
 
       let chosenInfo: SeriesInfo = await Tmdb.getMovieInfo(
         String(chosen.id),
-        'tv'
+        "tv"
       );
 
       setFeaturedData(chosenInfo);
@@ -81,9 +81,9 @@ function App() {
         setBlackHeader(false);
       }
     };
-    window.addEventListener('scroll', scrollListener);
+    window.addEventListener("scroll", scrollListener);
     return () => {
-      window.removeEventListener('scroll', scrollListener);
+      window.removeEventListener("scroll", scrollListener);
     };
   }, []);
 
